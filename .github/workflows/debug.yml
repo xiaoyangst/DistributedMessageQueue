@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y cmake g++ libgtest-dev
@@ -21,16 +22,25 @@ jobs:
         sudo cp lib/*.a /usr/lib/
         sudo cp lib/*.a /usr/local/lib/
 
-    - name: Verify gtest installation
-      run: ls -l /usr/lib/libgtest*
-
     - uses: actions/checkout@v1
 
     - name: Configure CMake
       run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror" ..
 
     - name: Build project
-      run: cd build && make && ls -l
+      run: cd build && make
 
     - name: Run Tests
-      run: find build -type f -executable -name "*.test" -exec {} \;
+      run: cd build && make test
+
+    - name: Upload test report to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: gtest-report
+        path: build/test_reports/
+
+    - name: Generate JUnit Test Report
+      uses: mikeal/publish-to-coverage-report@v1
+      with:
+        directory: build/test_reports
+        file: '*.xml'
