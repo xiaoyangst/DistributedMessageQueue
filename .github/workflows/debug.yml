@@ -34,7 +34,7 @@ jobs:
       run: cd build && make test
 
     - name: Upload test report to GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2  # 改为 v2 版本
       with:
         name: gtest-report
         path: build/test_reports/
