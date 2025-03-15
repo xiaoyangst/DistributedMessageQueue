@@ -20,11 +20,10 @@ jobs:
         sudo make
         sudo cp lib/*.a /usr/lib/
         sudo cp lib/*.a /usr/local/lib/
-
     - name: Verify gtest installation
       run: ls -l /usr/lib/libgtest*
 
-    - uses: actions/checkout@v2  # 更新为最新的 v2 版本
+    - uses: actions/checkout@v1
 
     - name: Configure CMake
       run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror" ..
@@ -33,13 +32,4 @@ jobs:
       run: cd build && make && ls -l
 
     - name: Run Tests
-      run: |
-        cd build
-        # 查找所有测试可执行文件并运行它们，生成 XML 报告
-        find . -type f -executable -name "*Test" -exec {} --gtest_output=xml:{}_report.xml \;
-
-    - name: Upload test results as artifact
-      uses: actions/upload-artifact@v3  # 更新为最新的 v3 版本
-      with:
-        name: test-reports
-        path: build/*_report.xml
+      run: find build -type f -executable -name "*Test" -exec {} \;
