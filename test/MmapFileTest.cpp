@@ -17,3 +17,4 @@ TEST(MmapFileTest, MmapFile) {
 	cout << "readContent: " << readContent << endl;
 	EXPECT_EQ(content, readContent);
 }
+

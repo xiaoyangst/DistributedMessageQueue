@@ -22,6 +22,7 @@ class MmapFile {
   void writeContent(const std::string &content, bool fsync = false);
  private:
   void loadFile();
+  void clean();
  private:
   std::string filePath_;
   size_t size_;
