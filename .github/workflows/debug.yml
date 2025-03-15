@@ -33,5 +33,10 @@ jobs:
       run: cd build && make && ls -l
 
     - name: Run Tests
-      run: find build -type f -executable -name "*Test" -exec {} \;
+      run: find . -type f -executable -name "*Test" -exec {} --gtest_output=xml:{}_report.xml \;
 
+    - name: Upload test results as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-reports
+        path: build/*_report.xml
