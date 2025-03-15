@@ -10,8 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Install gtest
-      run: sudo apt-get install -y libgtest-dev
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y cmake g++ libgtest-dev
+
+    - name: Build and install GoogleTest
+      run: |
+        cd /usr/src/googletest
+        sudo cmake -DCMAKE_CXX_STANDARD=17 .
+        sudo make
+        sudo cp lib/*.a /usr/lib/
+        sudo cp lib/*.a /usr/local/lib/
 
     - name: Verify gtest installation
       run: ls -l /usr/lib/libgtest*
