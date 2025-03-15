@@ -10,12 +10,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Install gtest manually
-      run: sudo apt-get install libgtest-dev && cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+    - name: Install gtest
+      run: sudo apt-get install -y libgtest-dev
+
+    - name: Verify gtest installation
+      run: ls -l /usr/lib/libgtest*
+
     - uses: actions/checkout@v1
-    - name: configure
+
+    - name: Configure CMake
       run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror" ..
-    - name: make
+
+    - name: Build project
       run: cd build && make
-    - name: Run Test
-      run: /home/runner/work/github_actions_gtest_example/github_actions_gtest_example/build/test/github_actions_gtest_example.test
+
+    - name: Run Tests
+      run: ./build/test/github_actions_gtest_example.test
